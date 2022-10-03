@@ -3,8 +3,8 @@ version: '3.1'
 services:
   web:
     build: ./
-    image: centos7_apache:1
-    container_name: apache
+    image: mycentos:7
+    container_name: myapache
     ports:
-      - "80:80"
-      - "8080:8080"
+      - "8080:80"
+    privileged: true

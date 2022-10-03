@@ -12,7 +12,7 @@ centos:7イメージからコンテナ名myapacheとしてsystemctlコマンド�
 docker run -itd --privileged -p 8080:80 --name myapache centos:7 /sbin/init
 ```
 
-myapacheコンテナを/bin/bashでcentos7に入る
+myapacheコンテナを/bin/bashで入る
 
 ```shell
 docker exec -it myapache /bin/bash
@@ -88,7 +88,7 @@ systemctl enable httpd
 httpdの再起動
 
 ```shell
-systemlctl restart httpd
+systemctl restart httpd
 ```
 
 firewalldの再起動
@@ -97,13 +97,27 @@ firewalldの再起動
 systemctl restart firewalld
 ```
 
-## Dockerfileから作成
+## Dockerfileからイメージ作成
 
-dockerfileからイメージ名centos_apache:7としてイメージ作成
+dockerfileからイメージ名mycentos:7としてイメージ作成
 
 ```shell
-docker build ./ -t centos_apache:7
+docker build ./ -t mycentos:7
 ```
+
+mycentos:7イメージからコンテナ名myapacheとしてsystemctlコマンドが使えるように/sbin/initでコンテナ起動
+
+```shell
+docker run -itd --privileged -p 8080:80 --name myapache mycentos:7 /sbin/init
+```
+
+myapacheコンテナを/bin/bashで入る
+
+```shell
+docker exec -it myapache /bin/bash
+```
+
+httpdとfirewalldの作業
 
 ```shell
 systemctl start firewalld
@@ -115,10 +129,41 @@ firewall-cmd --add-service https --permanent
 firewall-cmd --reload
 systemctl enable firewalld
 systemctl enable httpd
-systemlctl restart httpd
+systemctl restart httpd
 systemctl restart firewalld
 ```
 
+# docker-compose.ymlからイメージ作成
+
+docker-compose.ymlからイメージの作成
+
 ```shell
-docker run -it -p 8080:80 --name myapche centos:7 
+docker-compose build --no-cache
+```
+
+イメージmycentos:7からコンテナmyapacheを起動
+
+```
+docker-compose up -d
+```
+myapacheコンテナを/bin/bashで入る
+
+```shell
+docker exec -it myapache /bin/bash
+```
+
+httpdとfirewalldの作業
+
+```shell
+systemctl start firewalld
+systemctl start httpd
+firewall-cmd --add-service http
+firewall-cmd --add-service http --permanent
+firewall-cmd --add-service https
+firewall-cmd --add-service https --permanent
+firewall-cmd --reload
+systemctl enable firewalld
+systemctl enable httpd
+systemctl restart httpd
+systemctl restart firewalld
 ```

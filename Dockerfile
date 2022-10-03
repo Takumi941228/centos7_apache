@@ -8,4 +8,5 @@ RUN yum -y install httpd mod_pearl
 
 ADD index.html /var/www/html/index.html
 
+#docker-composeのときコメント無効に
 CMD [ "/sbin/init" ]
